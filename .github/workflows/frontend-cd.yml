@@ -1,0 +1,32 @@
+name: Deploy Frontend 
+run-name: ${{ github.actor }} triggered frontend pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use SSH Action
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd 3-tier-prod-cicd
+            git add .
+            git stash
+            git pull origin main
+            docker compose up -d --no-deps frontend
+
+

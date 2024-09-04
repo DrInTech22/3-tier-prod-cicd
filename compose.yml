@@ -24,10 +24,10 @@ services:
 
   frontend:
     build:
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
       context: ./frontend
     env_file:
-      - frontend/.env.prod
+      - frontend/.env
     depends_on:
       - backend
     ports:
@@ -38,10 +38,10 @@ services:
 
   backend:
     build:
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
       context: ./backend
     env_file:
-      - backend/.env.prod
+      - backend/.env
     ports:
       - "8000"
     networks:

@@ -138,9 +138,9 @@ This section sets up the full stack application in production, configures domain
   you will be prompted to change the password after login
 
 - generate ssl certificates for your subdomains in the following **order below** using **lets encrypt**. We will use the sample domain.
-  - **drintech.cloudopsdomain.online**
-  - **db.drintech.cloudopsdomain.online**
-  - **proxy.drintech.cloudopsdomain.online**
+  - **drintech.mooo.com**
+  - **db.drintech.mooo.com**
+  - **proxy.drintech.mooo.com**
 - stop the applications
   ```
   docker-compose -f docker-compose.prod.yml down
