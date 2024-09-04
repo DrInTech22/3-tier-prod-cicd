@@ -14,9 +14,9 @@ jobs:
       db:
         image: postgres:latest
         env:
-          POSTGRES_USER: "db"
+          POSTGRES_USER: "app"
           POSTGRES_PASSWORD: "changethis123"
-          POSTGRES_DB: "db"
+          POSTGRES_DB: "app"
         ports:
           - 5432:5432
     steps:
