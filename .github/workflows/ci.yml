@@ -1,0 +1,7 @@
+name: CI Pipeline
+run-name: ${{ github.actor }} triggered CI pipeline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
