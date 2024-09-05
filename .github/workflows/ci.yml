@@ -58,7 +58,7 @@ jobs:
       - name: Run tests
         run: |
           cd backend
-          poetry run poe test-unit
+          poetry run pytest
 
 
 
