@@ -29,13 +29,19 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd frontend
+          npm install
 
       - name: Lint code
-        run: npm run lint
+        run: |
+          cd frontend
+          npm run lint
 
       - name: Build
-        run: npm run build
+        run: |
+          cd frontend
+          npm run build
 
 
 
