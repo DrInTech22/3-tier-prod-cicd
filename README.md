@@ -161,6 +161,13 @@ volumes:
 This workflow handles the continuous integration for your application, triggered on pull requests and manual dispatch(optional). It sets up a test environment, installs dependencies, and runs tests.
 
    **Steps:**
+- create an environment `backend` and configure the following secrets and variables:
+  - secrets
+    - HOST
+    - USERNAME
+    - PASSWORD
+  - variables
+    - URL (to display deployment URL on workflow board)
 - Set up postgresql services as a mock database.
 - Set up Python and caches Python dependencies to speed up subsequent runs using actions/cache.
 - Installs the required dependencies using Poetry and set the .env file
@@ -172,12 +179,20 @@ This workflow handles the continuous integration for your application, triggered
     **Note: test script was not defined in package.json**
 
    **Steps:**
+- create an environment `frontend` and configure the following secrets and variables:
+  - secrets
+    - HOST
+    - USERNAME
+    - PASSWORD
+  - variables
+    - URL (to display deployment URL on workflow board)
 - Sets up a nodejs environment for testing the application
 - Caches dependencies to speed up subsequent runs using actions/cache@v3
 - Install dependencies, lint the code and build to verify the working functionality of the application.
 
 3. **frontend-cd.yml - Frontend Continuous Deployment (CD)**
 This workflow automates the deployment of the frontend application. It is triggered on push to the main branch when changes are made to the frontend folder.
+  
 ```sh
 docker compose up -d --no-deps --build frontend
 
