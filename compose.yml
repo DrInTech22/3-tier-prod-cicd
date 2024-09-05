@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
       context: ./frontend
     env_file:
-      - frontend/.env
+      - frontend/.env.prod
     depends_on:
       - backend
     networks:
@@ -39,7 +39,7 @@ services:
       dockerfile: Dockerfile
       context: ./backend
     env_file:
-      - backend/.env
+      - backend/.env.prod
     networks:
       - backend-network
       - db-network
