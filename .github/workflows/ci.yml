@@ -6,7 +6,6 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -19,6 +18,15 @@ jobs:
           POSTGRES_DB: "app"
         ports:
           - 5432:5432
+
+    env:
+      DATABASE_URL: "postgresql://app:changethis123@db:5432/app"
+      POSTGRES_SERVER: "db"
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: "app"
+      POSTGRES_USER: "app"
+      POSTGRES_PASSWORD: "changethis123"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,6 +35,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
@@ -37,10 +46,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          ping localhost:5432
           cd backend
           curl -sSL https://install.python-poetry.org | python3 -
           poetry install
+
+      - name: Wait for the database to be ready
+        run: |
+          until pg_isready --host=db --username=app --dbname=app; do
+            echo "Waiting for database..."
+            sleep 2
+          done
+          echo "Database is ready!"
 
       - name: Run app
         run: |
@@ -50,6 +66,65 @@ jobs:
 
       - name: Test code
         run: |
-          # Run pytest tests
-          pytest .
+          cd backend
+          poetry run pytest .
+
+
+
+
+
+# name: CI Pipeline
+# run-name: ${{ github.actor }} triggered CI pipeline
+
+# on:
+#   pull_request:
+#     types: [opened, synchronize, reopened]
+#   workflow_dispatch:
+
+
+# jobs:
+#   build-and-test:
+#     runs-on: ubuntu-latest
+#     services:
+#       db:
+#         image: postgres:13
+#         env:
+#           POSTGRES_USER: "app"
+#           POSTGRES_PASSWORD: "changethis123"
+#           POSTGRES_DB: "app"
+#         ports:
+#           - 5432:5432
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: "3.10"
+#       - name: Cache dependencies
+#         uses: actions/cache@v3
+#         with:
+#           path: ~/.cache/pip
+#           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+#           restore-keys: |
+#             ${{ runner.os }}-pip-
+
+#       - name: Install dependencies
+#         run: |
+#           ping localhost:5432
+#           cd backend
+#           curl -sSL https://install.python-poetry.org | python3 -
+#           poetry install
+
+#       - name: Run app
+#         run: |
+#           cd backend
+#           poetry run bash ./prestart.sh
+#           poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+#       - name: Test code
+#         run: |
+#           # Run pytest tests
+#           pytest .
 
