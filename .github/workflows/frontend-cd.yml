@@ -30,6 +30,6 @@ jobs:
             git add .
             git stash
             git pull origin main
-            docker compose up -d --no-deps frontend
+            docker compose up -d --no-deps --build frontend
 
 

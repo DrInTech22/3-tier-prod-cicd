@@ -11,7 +11,7 @@ services:
     volumes:
       - data:/data
       - letsencrypt:/etc/letsencrypt
-      - ./nginx/nginx.prod.conf:/data/nginx/custom/http_top.conf
+      - ./nginx/nginx.staging.conf:/data/nginx/custom/http_top.conf
     restart: always
     depends_on:
       - frontend
@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
       context: ./frontend
     env_file:
-      - frontend/.env.prod
+      - frontend/.env.staging
     depends_on:
       - backend
     networks:
@@ -39,7 +39,7 @@ services:
       dockerfile: Dockerfile
       context: ./backend
     env_file:
-      - backend/.env.prod
+      - backend/.env.staging
     networks:
       - backend-network
       - db-network
@@ -64,7 +64,6 @@ services:
       ADMINER_DEFAULT_SERVER: db
     networks:
       - db-network
-      - backend-network
 
 networks:
   frontend-network:

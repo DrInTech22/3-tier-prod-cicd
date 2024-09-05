@@ -1,5 +1,5 @@
-name: CI Pipeline
-run-name: ${{ github.actor }} triggered CI pipeline
+name: Backend CI Pipeline
+run-name: ${{ github.actor }} triggered Backend CI pipeline
 
 on:
   pull_request:

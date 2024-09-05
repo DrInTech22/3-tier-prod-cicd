@@ -1,0 +1,42 @@
+name: Frontend CI Pipeline
+run-name: ${{ github.actor }} triggered frontend CI pipeline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' 
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+
+
+

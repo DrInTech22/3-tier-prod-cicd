@@ -1,6 +1,6 @@
-# Full-Stack FastAPI and React Template
+# Full-Stack Application Deployment using Github Actions and Docker-compose
 
-Welcome to the Full-Stack FastAPI and React template repository. This repository serves as a demo application for interns, showcasing how to set up and run a full-stack application with a FastAPI backend and a ReactJS frontend using ChakraUI.
+Welcome to the Full-Stack application deployment repository. This repository demonstrates how to automate and streamline the deployment of full stack react and fastapi applications using powerful tools such as github actions and docker compose. 
 
 ## Project Structure
 
@@ -9,122 +9,44 @@ The repository is organized into two main directories:
 - **frontend**: Contains the ReactJS application.
 - **backend**: Contains the FastAPI application and PostgreSQL database integration.
 
-Each directory has its own README file with detailed instructions specific to that part of the application.
+## Overview
 
-## Getting Started
+This repository contains a full-stack application automated  deployment using Docker Compose and github actions. The application consists of a FastAPI backend, a Node.js frontend, a PostgreSQL database, an Adminer database management tool, an Nginx Proxy Manager.
 
-To get started with this template, please follow the instructions in the respective directories:
+Each of this application is containerized to facilitate easy deployment and scaling in respect to demand. The Github Actions CI/CD runs a CI pipeline that runs test on the fastAPI application. The CDs pipeline then continuously deploy code changes to frontend and backend containers on the staging environment. The deployments are accessible via custom domains as presented below.
 
-- [Frontend README](./frontend/README.md)
-- [Backend README](./backend/README.md)
+<img src="assets/Screenshot (408).png" width="45%"></img> <img src="assets/Screenshot (407).png" width="45%"></img> 
+<img src="assets/Screenshot (410).png" width="45%"></img> <img src="assets/Screenshot (405).png" width="45%"></img> 
 
-This repository contains a full-stack application setup using Docker Compose. The application consists of a FastAPI backend, a Node.js frontend, a PostgreSQL database, an Adminer database management tool, an Nginx Proxy Manager, and an Nginx web server.
 
-### This repository is configured to be able to deploy locally (development) and in production.
+## 
+**I initially configured this project to be able to deploy locally (development) and in production before I integrated the github actions. You can check the full setup [here](https://github.com/DrInTech22/devops-stage-2)** 
 
 - **backend**: FastAPI application serving the backend API.
 - **frontend**: Node.js application serving the frontend.
 - **db**: PostgreSQL database for storing application data.
 - **adminer**: Database management tool to interact with the PostgreSQL database.
-- **nginx_proxy**: Nginx Proxy Manager to handle SSL certificates and domain management both locally and in production
+- **nginx_proxy**: Nginx Proxy Manager to handle SSL certificates and domain management both locally and in staging/production with an easily accessible interface.
 
 
-## How to set up locally
-
-1. **Clone the repository**:
-
-   ```sh
-   git clone https://github.com/DrInTech22/devops-stage-2.git
-   cd devops-stage-2
-   ```
-
-2. **Build and start the services**:
-
-   ```sh
-   docker compose up -d
-   ```
-   for older version of docker compose, run:
-   ```sh
-   docker-compose up -d
-   ```   
-
-3. **Verify the services are running and all path are accessible**:
-   - **FastAPI Backend**: [http://localhost/api](http://localhost/api)
-   - **FastAPI Backend Docs**: [http://localhost/docs](http://localhost/docs)
-   - **FastAPI Backend Redoc**: [http://localhost/api/redoc](http://localhost/api)
-   - **Node.js Frontend**: [http://localhost](http://localhost)
-   - **PostgreSQL Database**: internally ccessible on port `5432` (no direct browser access)
-   - **Adminer**: [http://localhost:8080](http://localhost:8080) or [http://db.localhost](http://db.localhost)
-   - **Nginx Proxy Manager**: [http://localhost:8090](http://localhost:8090) or [http://proxy.localhost](http://proxy.localhost)
-
-
-## Local Service Details (docker-compose.yml)
-
-### Backend (FastAPI)
-
-- **Directory**: `./backend`
-- **Dockerfile for development**: `Dockerfile.dev`
-- **Port**: `8000`
-- **Development Environment Variables file**: `backend/.env.dev`
-  
-### Frontend (Node.js)
-
-- **Directory**: `./frontend`
-- **Dockerfile for development**: `Dockerfile.dev`
-- **Port**: `5173`
-- **Development Environment Variables file**: `frontend/.env.dev`
-
-### Database (PostgreSQL)
-
-- **Docker Image**: `postgres:13`
-- **Port**: `5432`
-- **Environment Variables**:
-  - `POSTGRES_USER`: Username for PostgreSQL.
-  - `POSTGRES_PASSWORD`: Password for the PostgreSQL user.
-  - `POSTGRES_DB`: Name of the PostgreSQL database.
-- **Volumes**:
-  - `postgres_data`: Persists PostgreSQL data.
-
-### Adminer
-
-- **Docker Image**: `adminer`
-- **Port**: `8080`
-
-### Proxy (Nginx Proxy Manager)
-
-- **Docker Image**: `jc21/nginx-proxy-manager:latest`
-- **Docker Container**: `nginx_proxy_manager`
-- **Port**: `8090`
-- **Volumes**:
-  - `data`: Persistent data for the proxy manager.
-  - `letsencrypt`: SSL certificates.
-  - `./nginx/nginx.dev.conf`: Config for proxy manager.
-- **Depends On**:
-  - `frontend`
-  - `backend`
-  - `db`
-  - `adminer`
-
-
-
-## How to set up in production with domain
+## How to set up staging/production deployment with custom domain
 This section sets up the full stack application in production, configures domain name to access the application and secures it with ssl certificates.
 
 ### Set up domain
 - Get a domain e.g mydomain.com, configure the following subdomain as A records pointing to your public ip.
 - **mydomain.com, db.mydomain.com, proxy.mydomain.com**
-- replace the subdomain in nginx/nginx.conf with your subdomain in all required lines.
-- This example used **drintech.cloudopsdomain.online, db.drintech.cloudopsdomain.online, proxy.drintech.cloudopsdomain.online**
+- replace the subdomain in nginx/nginx.staging.conf with your subdomain in all required lines.
+- This example used **drintech.mooo.com, db.drintech.mooo.com, proxy.drintech.mooo.com**. 
 
 ## Initial setup 
 - clone the project
   ```sh
-   git clone https://github.com/DrInTech22/devops-stage-2.git
-   cd devops-stage-2
+   git clone https://github.com/DrInTech22/3-tier-prod-cicd.git
+   cd 3-tier-prod-cicd
    ```
 - run the project
   ```sh
-  docker-compose -f docker-compose.prod.yml up -d
+  docker compose up -d
   ```
 - access the NPM on your browser using your public-ip
   ```sh
@@ -141,41 +63,36 @@ This section sets up the full stack application in production, configures domain
   - **drintech.mooo.com**
   - **db.drintech.mooo.com**
   - **proxy.drintech.mooo.com**
-- stop the applications
-  ```
-  docker-compose -f docker-compose.prod.yml down
-  ```
 ## Final setup
-- uncomment `#- ./nginx/nginx.prod.conf:/data/nginx/custom/http_top.conf` in the `docker-compose.prod.yaml` file. This maps nginx.prod.conf file on NPM.
+- uncomment `#- ./nginx/nginx.staging.conf:/data/nginx/custom/http_top.conf` in the `compose.yaml` file. This maps nginx.prod.conf file on NPM.
 ```
 volumes:
   - data:/data
   - letsencrypt:/etc/letsencrypt
-#-./nginx/nginx.prod.conf:/data/nginx/custom/http_top.conf
+#-./nginx/nginx.staging.conf:/data/nginx/custom/http_top.conf
 ```
-- nginx.prod.conf sets up proxy host for the sub-domains, **www to non-www redirection** and **http to https redirection**.
-- restart the application
+- nginx.prod.conf sets up proxy host for the sub-domains, and configures **www to non-www redirection** and **http to https redirection**.
+- recreate the containers
   ```sh
-  docker-compose -f docker-compose.prod.yml up -d
+  docker compose up -d --force-recreate
   ```
 - **Verify the services are running and all path are accessible**:
-   - **FastAPI Backend**: drintech.cloudopsdomain.online/api
-   - **FastAPI Backend Docs**: drintech.cloudopsdomain.online/docs
-   - **FastAPI Backend Redoc**: drintech.cloudopsdomain.online/redoc
-   - **Node.js Frontend**: drintech.cloudopsdomain.online
-   - **Adminer**: db.drintech.cloudopsdomain.online
-   - **Nginx Proxy Manager**: proxy.drintech.cloudopsdomain.online
+   - **FastAPI Backend Docs**: drintech.mooo.com/docs
+   - **FastAPI Backend Redoc**: drintech.mooo.com/redoc
+   - **Node.js Frontend**: drintech.mooo.com
+   - **Adminer**: db.drintech.mooo.com
+   - **Nginx Proxy Manager**: proxy.drintech.mooo.com
 
 - test http to https redirection and www to non-www redirection are working
-  - www.drintech.cloudopsdomain.online
-  - https://www.drintech.cloudopsdomain.online
-  - http://www.drintech.cloudopsdomain.online
+  - www.drintech.mooo.com
+  - https://www.drintech.mooo.com
+  - http://www.drintech.mooo.com
 
-## Production Service Details (docker-compose.prod.yml)
+## Production Service Details (compose.yml)
 
 ### Services
 
-- **nginx-proxy**: Manages the proxying of traffic between different services.
+- **nginx**: Manages the proxying of traffic between different services. It serve as the entrypoint of traffic into the containers. 
   - Image: `jc21/nginx-proxy-manager:2.10.4`
   - Ports: `80:80`, `443:443`, `8090:81`
   - Environment:
@@ -185,19 +102,19 @@ volumes:
     - `letsencrypt`: Persistent storage for Let's Encrypt certificates.
     - `./nginx/nginx.prod.conf`: config for proxy manager
   - Depends on: `frontend`, `backend`, `db`, `adminer`
-  - Networks: `frontend-network`, `backend-network`, `db-network`
+  - Networks: `frontend-network`, `backend-network`, 
 
 - **frontend**: The frontend service built from a custom Dockerfile.
   - Build context: `./frontend`
-  - Dockerfile: `Dockerfile.prod`
-  - Environment file: `frontend/.env.prod`
+  - Dockerfile: `Dockerfile`
+  - Environment file: `frontend/.env.staging`
   - Depends on: `backend`
   - Networks: `frontend-network`, `backend-network`
 
 - **backend**: The backend service built from a custom Dockerfile.
   - Build context: `./backend`
-  - Dockerfile: `Dockerfile.prod`
-  - Environment file: `backend/.env.prod`
+  - Dockerfile: `Dockerfile`
+  - Environment file: `backend/.env.staging`
   - Environment:
     - `DATABASE_URL`: Connection string for the PostgreSQL database.
   - Depends on: `db`
@@ -212,9 +129,10 @@ volumes:
     - `POSTGRES_USER`: Database user.
     - `POSTGRES_PASSWORD`: Database password.
   - Ports: `5432`
-  - Networks: `db-network`
+  - Networks: `db-network` 
+  - Only the backend and adminer can access the database, this adds another layer of security to the database.
 
-- **adminer**: Database management tool.
+- **adminer**: Database management tool. It provides an interface to access postgresql.
   - Image: `adminer`
   - Ports: `8080:8080`
   - Environment:
@@ -235,8 +153,42 @@ volumes:
 
 ### Environment Files
 
-- **frontend/.env.prod**: Contains production environment variables for the frontend service.
-- **backend/.env.prod**: Contains production environment variables for the backend service.
+- **frontend/.env.staging**: Contains staging environment variables for the frontend service.
+- **backend/.env.staging**: Contains staging environment variables for the backend service.
 
+## How to set Github Actions for Continuous Integration and Deployment
+1. **backend-ci.yml - Continuous Integration (CI) Pipeline**:
+This workflow handles the continuous integration for your application, triggered on pull requests and manual dispatch(optional). It sets up a test environment, installs dependencies, and runs tests.
 
+   **Steps:**
+- Set up postgresql services as a mock database.
+- Set up Python and caches Python dependencies to speed up subsequent runs using actions/cache.
+- Installs the required dependencies using Poetry and set the .env file
+- Runs the app in the background and runs the test suite using pytest to verify the code functionality.
+
+2. **frontend-ci.yml - Continuous Integration (CI) Pipeline**:
+This workflow handles the continuous integration for your application, triggered on pull requests and manual dispatch(optional). It sets up a test environment, installs dependencies, lint and build the code.
+
+    **Note: test script was not defined in package.json**
+
+   **Steps:**
+- Sets up a nodejs environment for testing the application
+- Caches dependencies to speed up subsequent runs using actions/cache@v3
+- Install dependencies, lint the code and build to verify the working functionality of the application.
+
+3. **frontend-cd.yml - Frontend Continuous Deployment (CD)**
+This workflow automates the deployment of the frontend application. It is triggered on push to the main branch when changes are made to the frontend folder.
+```sh
+docker compose up -d --no-deps --build frontend
+
+```
+The command above rebuilds the frontend container and makes sure all its depending containers are not restarted in the process. 
+
+4. **backend-cd.yml - Backend Continuous Deployment (CD)**
+This workflow automates the deployment of the backend application. It is triggered on push to the main branch when changes are made to the frontend folder.
+```sh
+docker compose up -d --no-deps --build backend
+
+```
+The command above rebuilds the backend container and makes sure all its depending containers are not restarted in the process. 
 
