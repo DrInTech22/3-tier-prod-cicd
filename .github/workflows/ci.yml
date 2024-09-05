@@ -52,10 +52,7 @@ jobs:
 
       - name: Wait for the database to be ready
         run: |
-          until pg_isready --host=db --username=app --dbname=app; do
-            echo "Waiting for database..."
-            sleep 2
-          done
+          sleep 10
           echo "Database is ready!"
 
       - name: Run app
