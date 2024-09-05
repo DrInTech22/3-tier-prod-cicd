@@ -49,7 +49,9 @@ jobs:
           poetry install
           
       - name: Copy env file
-        run: cp .env.sample .env
+        run: |
+          cd backend
+          cp .env.sample .env
 
       - name: Run app
         run: |
