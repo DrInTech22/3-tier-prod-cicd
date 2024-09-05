@@ -13,19 +13,25 @@ jobs:
       db:
         image: postgres:13
         env:
-          POSTGRES_USER: "app"
-          POSTGRES_PASSWORD: "changethis123"
-          POSTGRES_DB: "app"
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: changethis123
+          POSTGRES_DB: app
+          POSTGRES_HOST: db
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     env:
-      DATABASE_URL: "postgresql://app:changethis123@db:5432/app"
-      POSTGRES_SERVER: "db"
+      POSTGRES_HOST: db
+      POSTGRES_SERVER: db
       POSTGRES_PORT: 5432
-      POSTGRES_DB: "app"
-      POSTGRES_USER: "app"
-      POSTGRES_PASSWORD: "changethis123"
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: changethis123
 
     steps:
       - name: Checkout code
