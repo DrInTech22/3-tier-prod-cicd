@@ -55,10 +55,10 @@ jobs:
           poetry run bash ./prestart.sh
           poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000 &
 
-      - name: Test code
+      - name: Run tests
         run: |
           cd backend
-          poetry run pytest .
+          poetry run poe test-unit
 
 
 
