@@ -56,15 +56,11 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           poetry install
 
-      - name: Wait for the database to be ready
-        run: |
-          docker ps
-          sleep 10
-          echo "Database is ready!"
 
       - name: Run app
         run: |
           cd backend
+          ping db:5432
           poetry run bash ./prestart.sh
           poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000
 
